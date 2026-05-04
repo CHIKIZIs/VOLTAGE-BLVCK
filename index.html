@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOLTAGE | Сеть киберарен Саратова</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-base: #030303;
+            --bg-surface: #0a0a0a;
+            --text-main: #e0e0e0;
+            --text-muted: #888888;
+            --accent: #ffcc00; 
+            --accent-dark: #cca300;
+            --card-bg: rgba(25, 25, 25, 0.6);
+            --card-border: rgba(255, 255, 255, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; }
+
+        body { 
+            background-color: var(--bg-base); 
+            color: var(--text-main); 
+            font-family: 'Montserrat', sans-serif; 
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .price, .oswald { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+
+        /* SCROLL ANIMATIONS */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .fade-in-up.visible { opacity: 1; transform: translateY(0); }
+
+        /* HEADER */
+        header { 
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(3, 3, 3, 0.3); backdrop-filter: blur(12px);
+            border-bottom: 1px solid transparent; padding: 20px 0; transition: all 0.4s ease;
+        }
+        header.scrolled {
+            background: rgba(3, 3, 3, 0.95); border-bottom: 1px solid var(--card-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8); padding: 12px 0;
+        }
+        .nav-container { 
+            max-width: 1400px; margin: 0 auto; padding: 0 40px; 
+            display: flex; justify-content: space-between; align-items: center; 
+        }
+        .logo { 
+            font-size: 28px; font-weight: 800; color: #fff; 
+            text-decoration: none; letter-spacing: 4px; transition: transform 0.3s;
+        }
+        .logo:hover { transform: scale(1.05); text-shadow: 0 0 15px rgba(255,204,0,0.4); }
+        .logo span { color: var(--accent); }
+        
+        .contact-btn {
+            background: transparent; color: #fff; text-decoration: none;
+            border: 1px solid var(--card-border); padding: 10px 24px;
+            border-radius: 30px; font-weight: 600; font-size: 14px;
+            display: flex; align-items: center; gap: 8px; transition: 0.3s;
+        }
+        .contact-btn:hover { 
+            background: var(--accent); color: #000; border-color: var(--accent); 
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.4); transform: translateY(-2px);
+        }
+
+        /* HERO SECTION */
+        .hero { 
+            height: 100vh; display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden; text-align: center;
+            background: linear-gradient(to bottom, rgba(3,3,3,0.5) 0%, rgba(3,3,3,1) 100%), url('bg.jpg') center/cover no-repeat;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, #030303 100%); z-index: 1;
+        }
+        .hero-content { position: relative; z-index: 2; max-width: 900px; padding: 0 20px; animation: heroFadeIn 1.5s ease-out; }
+        .hero h1 { font-size: 6rem; letter-spacing: 8px; margin-bottom: 10px; color: #fff; text-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .hero p { font-size: 1.3rem; color: #fff; margin-bottom: 40px; font-weight: 300; letter-spacing: 2px; text-transform: uppercase;}
+        
+        @keyframes heroFadeIn {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255, 204, 0, 0.1); border: 1px solid rgba(255, 204, 0, 0.3);
+            padding: 12px 24px; border-radius: 40px; color: var(--accent);
+            font-weight: 600; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.1); transition: all 0.3s ease;
+        }
+        .status-badge:hover { background: rgba(255, 204, 0, 0.2); box-shadow: 0 0 30px rgba(255, 204, 0, 0.3); transform: scale(1.05); }
+        .pulse { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); animation: pulse 2s infinite; }
+        
+        @keyframes pulse { 
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.7); } 
+            70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(255, 204, 0, 0); } 
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 204, 0, 0); } 
+        }
+
+        /* SECTIONS */
+        section { padding: 100px 40px; max-width: 1400px; margin: 0 auto; position: relative;}
+        .section-title { 
+            font-size: 3rem; color: #fff; margin-bottom: 60px; 
+            display: flex; align-items: center; gap: 20px;
+        }
+        .section-title::after { content: ''; flex-grow: 1; height: 1px; background: linear-gradient(90deg, var(--card-border), transparent); }
+
+        /* ABOUT NETWORK SECTION */
+        .about-text { text-align: center; font-size: 1.2rem; color: #ccc; max-width: 1000px; margin: 0 auto 50px; line-height: 1.8; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .feature-item {
+            background: var(--bg-surface); border: 1px solid var(--card-border);
+            padding: 30px; border-radius: 16px; display: flex; align-items: flex-start; gap: 20px;
+            transition: 0.3s;
+        }
+        .feature-item:hover { border-color: rgba(255,204,0,0.3); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .feature-item i { font-size: 2.5rem; color: var(--accent); line-height: 1; }
+        .feature-item h4 { color: #fff; margin-bottom: 8px; font-size: 1.1rem; }
+        .feature-item p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* CLUBS LOCATIONS */
+        .clubs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+        .club-card {
+            background: linear-gradient(145deg, var(--bg-surface), #111); border: 1px solid var(--card-border);
+            border-radius: 20px; padding: 40px; text-align: center; transition: 0.4s; position: relative; overflow: hidden;
+        }
+        .club-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: var(--accent); opacity: 0; transition: 0.4s;
+        }
+        .club-card:hover { transform: translateY(-10px); border-color: rgba(255,204,0,0.2); box-shadow: 0 20px 40px rgba(0,0,0,0.7); }
+        .club-card:hover::before { opacity: 1; }
+        
+        .club-card h3 { font-size: 2rem; color: #fff; margin-bottom: 5px; letter-spacing: 2px; }
+        .club-card .address { color: var(--text-muted); font-size: 1rem; margin-bottom: 25px; }
+        .club-card .phone { font-size: 1.5rem; color: var(--accent); font-weight: 600; font-family: 'Oswald', sans-serif; margin-bottom: 30px; display: block; text-decoration: none;}
+        
+        .book-btn {
+            display: inline-block; background: var(--accent); color: #000;
+            padding: 15px 35px; border-radius: 40px; font-weight: 700; text-decoration: none;
+            text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(255,204,0,0.2);
+        }
+        .book-btn:hover { background: #fff; color: #000; box-shadow: 0 10px 25px rgba(255,255,255,0.3); transform: scale(1.05); }
+
+        /* GALLERY */
+        .gallery-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+        }
+        .gallery-item {
+            width: 100%; height: 300px; border-radius: 16px; overflow: hidden; position: relative; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        .gallery-item img {
+            width: 100%; height: 100%; object-fit: cover; filter: grayscale(50%) contrast(1.1);
+            transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .gallery-item::after {
+            content: '\EB23';
+            font-family: 'remixicon';
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.5);
+            color: var(--accent); font-size: 3rem; opacity: 0; transition: 0.4s;
+        }
+        .gallery-item:hover img { filter: grayscale(0%) contrast(1.2); transform: scale(1.1); }
+        .gallery-item:hover::after { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+        /* MODAL FOR FULLSCREEN IMAGES */
+        .modal {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0;
+            width: 100%; height: 100%; overflow: hidden;
+            background-color: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+            opacity: 0; transition: opacity 0.4s ease;
+        }
+        .modal.show { opacity: 1; display: flex; align-items: center; justify-content: center; }
+        .modal-content {
+            margin: auto; display: block; max-width: 95%; max-height: 90vh;
+            border-radius: 8px; box-shadow: 0 0 50px rgba(255, 204, 0, 0.2);
+            transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            object-fit: contain;
+        }
+        .modal.show .modal-content { transform: scale(1); }
+        .close-modal {
+            position: absolute; top: 20px; right: 35px; color: #fff;
+            font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s;
+            z-index: 2001;
+        }
+        .close-modal:hover { color: var(--accent); transform: rotate(90deg); }
+
+        /* CARDS GRID (PC/PS) */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .card {
+            background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border); border-radius: 20px; padding: 40px; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden;
+        }
+        .card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0; transition: 0.4s;
+        }
+        .card:hover { transform: translateY(-15px); border-color: rgba(255,204,0,0.3); box-shadow: 0 25px 50px rgba(0,0,0,0.8), 0 0 20px rgba(255, 204, 0, 0.1); }
+        .card:hover::before { opacity: 1; }
+        .card h3 { font-size: 1.8rem; color: #fff; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .price { color: var(--accent); font-size: 1.5rem; text-shadow: 0 0 10px rgba(255,204,0,0.3); }
+        .card p.qty { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
+        .specs { list-style: none; margin-bottom: 30px; }
+        .specs li { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; font-size: 0.95rem; color: #ccc; transition: 0.3s; }
+        .card:hover .specs li { color: #fff; transform: translateX(5px); }
+        .specs li i { color: var(--accent); font-size: 1.2rem; }
+
+        .night-pack {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border);
+            padding: 15px; border-radius: 12px; display: flex; justify-content: space-between;
+            align-items: center; font-weight: 600; font-size: 0.9rem; color: #fff;
+            transition: 0.3s;
+        }
+        .card:hover .night-pack { background: rgba(255, 204, 0, 0.05); border-color: rgba(255,204,0,0.2); }
+        .night-pack span { color: var(--text-muted); font-weight: 400; font-family: 'Montserrat', sans-serif;}
+
+        /* BAR & INFO */
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; }
+        .info-card { 
+            background: var(--bg-surface); padding: 40px; border-radius: 20px; 
+            border: 1px solid var(--card-border); transition: 0.4s;
+        }
+        .info-card:hover { border-color: rgba(255,204,0,0.2); box-shadow: 0 15px 40px rgba(0,0,0,0.6); transform: translateY(-10px); }
+        .info-card h4 { font-size: 1.5rem; font-family: 'Oswald', sans-serif; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; text-transform: uppercase; }
+        .info-card h4 i { color: var(--accent); font-size: 1.8rem; }
+        .tea-list { font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; }
+
+        /* FOOTER */
+        footer { border-top: 1px solid var(--card-border); padding: 60px 40px; background: #010101; text-align: center; }
+        .footer-logo { font-family: 'Oswald', sans-serif; font-size: 2.5rem; letter-spacing: 2px; color: #fff; margin-bottom: 10px; }
+        .footer-desc { color: var(--text-muted); margin-bottom: 30px; }
+        
+        .socials { display: flex; justify-content: center; gap: 20px; }
+        .socials a {
+            width: 60px; height: 60px; border-radius: 50%; border: 1px solid var(--card-border);
+            display: flex; align-items: center; justify-content: center; transition: 0.4s;
+            background: rgba(255,255,255,0.03);
+        }
+        .vk-icon-img { width: 30px; height: auto; transition: 0.4s; }
+        .socials a:hover { 
+            background: var(--accent); border-color: var(--accent); 
+            transform: translateY(-8px) rotate(10deg); box-shadow: 0 10px 20px rgba(255,204,0,0.4); 
+        }
+        .socials a:hover .vk-icon-img { filter: brightness(0); }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 4rem; letter-spacing: 4px; }
+            section { padding: 60px 20px; }
+            .section-title { font-size: 2rem; }
+            .nav-container { padding: 0 20px; }
+            .contact-btn { display: none; }
+            .info-grid { grid-template-columns: 1fr; }
+            .close-modal { top: 15px; right: 20px; font-size: 35px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="header">
+        <div class="nav-container">
+            <a href="#" class="logo">VOLTAGE</a>
+            <a href="#clubs" class="contact-btn"><i class="ri-map-pin-line"></i> Выбрать клуб</a>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h1>VOLTAGE</h1>
+            <p>Крупнейшая сеть компьютерных клубов Саратова</p>
+            <div class="status-badge">
+                <div class="pulse"></div> 
+                Круглосуточно 24/7
+            </div>
+        </div>
+    </div>
+
+    <section id="about">
+        <h2 class="section-title fade-in-up">О сети <i class="ri-flashlight-fill" style="color:var(--accent)"></i></h2>
+        <p class="about-text fade-in-up">
+            Каждая из трех наших киберарен имеет уникальный фирменный стиль, разнообразные игровые зоны и неповторимую атмосферу гейминга! У нас работают профессиональные администраторы, а также регулярно проходят киберспортивные турниры по DOTA2, CS2 и другим играм.
+        </p>
+        
+        <div class="features-grid">
+            <div class="feature-item fade-in-up" style="transition-delay: 0.1s;">
+                <i class="ri-computer-line"></i>
+                <div>
+                    <h4 class="oswald">123 Мощных ПК</h4>
+                    <p>С мониторами от 600Hz до 2K 320Hz для идеальной плавности.</p>
+                </div>
+            </div>
+            <div class="feature-item fade-in-up" style="transition-delay: 0.2s;">
+                <i class="ri-cpu-line"></i>
+                <div>
+                    <h4 class="oswald">RTX 5070 Ti 16 GB</h4>
+                    <p>Топовые видеокарты для максимального FPS в любых новинках.</p>
+                </div>
+            </div>
+            <div class="feature-item fade-in-up" style="transition-delay: 0.3s;">
+                <i class="ri-mouse-line"></i>
+                <div>
+                    <h4 class="oswald">PRO Девайсы</h4>
+                    <p>Только лучшая периферия от HyperX и Logitech.</p>
+                </div>
+            </div>
+            <div class="feature-item fade-in-up" style="transition-delay: 0.4s;">
+                <i class="ri-gamepad-line"></i>
+                <div>
+                    <h4 class="oswald">PS5 и TV 100"</h4>
+                    <p>Комфортные лаунж зоны с консолями и огромными 140Hz экранами.</p>
+                </div>
+            </div>
+            <div class="feature-item fade-in-up" style="transition-delay: 0.5s;">
+                <i class="ri-steering-2-line"></i>
+                <div>
+                    <h4 class="oswald">Спец-зоны</h4>
+                    <p>Проекторы и профессиональные игровые рули для автосимуляторов.</p>
+                </div>
+            </div>
+            <div class="feature-item fade-in-up" style="transition-delay: 0.6s;">
+                <i class="ri-goblet-line"></i>
+                <div>
+                    <h4 class="oswald">Обширный бар</h4>
+                    <p>Огромный выбор еды, авторских чаев и напитков.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="clubs">
+        <h2 class="section-title fade-in-up">Наши клубы <i class="ri-map-pin-2-line" style="color:var(--accent)"></i></h2>
+        <div class="clubs-grid">
+            <div class="club-card fade-in-up" style="transition-delay: 0.1s;">
+                <h3>VOLTAGE <span style="color:var(--accent)">BLACK</span></h3>
+                <p class="address"><i class="ri-map-pin-line"></i> ул. Астраханская, 102к5</p>
+                <a href="tel:+79047067733" class="phone">+7 (904) 706-77-33</a>
+                <a href="https://vk.cc/cUjpze" target="_blank" class="book-btn">Забронировать</a>
+            </div>
+            <div class="club-card fade-in-up" style="transition-delay: 0.2s;">
+                <h3>VOLTAGE <span style="color:var(--accent)">REBORN</span></h3>
+                <p class="address"><i class="ri-map-pin-line"></i> ул. Московская, 84</p>
+                <a href="tel:+79536386888" class="phone">+7 (953) 638-68-88</a>
+                <a href="https://vk.cc/cUJPJh" target="_blank" class="book-btn">Забронировать</a>
+            </div>
+            <div class="club-card fade-in-up" style="transition-delay: 0.3s;">
+                <h3>VOLTAGE <span style="color:var(--accent)">LOUNGE</span></h3>
+                <p class="address"><i class="ri-map-pin-line"></i> ул. Усть-Курдюмская, 9</p>
+                <a href="tel:+79020488404" class="phone">+7 (902) 048-84-04</a>
+                <a href="https://vk.cc/cUJPMX" target="_blank" class="book-btn">Забронировать</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery">
+        <h2 class="section-title fade-in-up">Атмосфера <i class="ri-camera-lens-line" style="color:var(--accent)"></i></h2>
+        <div class="gallery-grid">
+            <div class="gallery-item fade-in-up" style="transition-delay: 0.1s;"><img src="1.jpg" alt="Club Photo 1"></div>
+            <div class="gallery-item fade-in-up" style="transition-delay: 0.2s;"><img src="2.jpg" alt="Club Photo 2"></div>
+            <div class="gallery-item fade-in-up" style="transition-delay: 0.3s;"><img src="3.jpg" alt="Club Photo 3"></div>
+            <div class="gallery-item fade-in-up" style="transition-delay: 0.4s;"><img src="4.jpg" alt="Club Photo 4"></div>
+            <div class="gallery-item fade-in-up" style="transition-delay: 0.5s;"><img src="5.jpg" alt="Club Photo 5"></div>
+            <div class="gallery-item fade-in-up" style="transition-delay: 0.1s;"><img src="6.jpg" alt="Club Photo 6"></div>
+            <div class="gallery-item fade-in-up" style="transition-delay: 0.2s;"><img src="7.jpg" alt="Club Photo 7"></div>
+            <div class="gallery-item fade-in-up" style="transition-delay: 0.3s;"><img src="8.jpg" alt="Club Photo 8"></div>
+            <div class="gallery-item fade-in-up" style="transition-delay: 0.4s;"><img src="9.jpg" alt="Club Photo 9"></div>
+            <div class="gallery-item fade-in-up" style="transition-delay: 0.5s;"><img src="10.jpg" alt="Club Photo 10"></div>
+        </div>
+    </section>
+
+    <div id="imageModal" class="modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="fullImage" alt="Fullscreen Image">
+    </div>
+
+    <section id="pc-zones">
+        <h2 class="section-title fade-in-up">Примеры наших сборок и зон</h2>
+        <div class="grid">
+            <div class="card fade-in-up" style="transition-delay: 0.1s;">
+                <h3>PREMIUM <span class="price">от 110 ₽</span></h3>
+                <p class="qty">Базовые игровые зоны</p>
+                <ul class="specs">
+                    <li><i class="ri-cpu-line"></i> Ryzen 5 7500f</li>
+                    <li><i class="ri-artboard-line"></i> RTX 4060Ti</li>
+                    <li><i class="ri-ram-2-line"></i> 32GB DDR5</li>
+                    <li><i class="ri-computer-line"></i> 240Hz Monitors</li>
+                </ul>
+                <div class="night-pack"><span>Пакет Ночь</span> Уточняйте в клубе</div>
+            </div>
+
+            <div class="card fade-in-up" style="transition-delay: 0.2s;">
+                <h3>PRO <span class="price">от 140 ₽</span></h3>
+                <p class="qty">Продвинутые зоны</p>
+                <ul class="specs">
+                    <li><i class="ri-cpu-line"></i> i9-9900 / R5 7500f</li>
+                    <li><i class="ri-artboard-line"></i> RTX 4060Ti</li>
+                    <li><i class="ri-ram-2-line"></i> 32GB DDR5</li>
+                    <li><i class="ri-computer-line"></i> 320Hz Monitors</li>
+                </ul>
+                <div class="night-pack"><span>Пакет Ночь</span> от 700 ₽</div>
+            </div>
+
+            <div class="card fade-in-up" style="border-color: rgba(255, 204, 0, 0.3); transition-delay: 0.3s;">
+                <h3>VIP <span class="price">от 200 ₽</span></h3>
+                <p class="qty">Комнаты повышенного комфорта</p>
+                <ul class="specs">
+                    <li><i class="ri-cpu-line"></i> Ryzen 5 7600x</li>
+                    <li><i class="ri-artboard-line"></i> RTX 5070</li>
+                    <li><i class="ri-ram-2-line"></i> 32GB DDR5</li>
+                    <li><i class="ri-computer-line"></i> 300Hz 2k / 280Hz FHD</li>
+                </ul>
+                <div class="night-pack"><span>Пакет Ночь</span> от 900 ₽</div>
+            </div>
+
+            <div class="card fade-in-up" style="transition-delay: 0.4s;">
+                <h3>TRIO <span class="price">от 230 ₽</span></h3>
+                <p class="qty">VIP Комнаты (по 3 ПК)</p>
+                <ul class="specs">
+                    <li><i class="ri-cpu-line"></i> Ryzen 7 9800x3D</li>
+                    <li><i class="ri-artboard-line"></i> RTX 5070Ti</li>
+                    <li><i class="ri-ram-2-line"></i> 32GB DDR5</li>
+                    <li><i class="ri-computer-line"></i> 600Hz 24.1"</li>
+                </ul>
+                <div class="night-pack"><span>Пакет Ночь</span> от 1250 ₽</div>
+            </div>
+
+            <div class="card fade-in-up" style="transition-delay: 0.5s;">
+                <h3>DUO <span class="price">от 260 ₽</span></h3>
+                <p class="qty">Топовые сборки (по 2 ПК)</p>
+                <ul class="specs">
+                    <li><i class="ri-cpu-line"></i> i9-14900kf</li>
+                    <li><i class="ri-artboard-line"></i> RTX 5070Ti 16GB</li>
+                    <li><i class="ri-ram-2-line"></i> 32GB DDR5</li>
+                    <li><i class="ri-computer-line"></i> 600Hz 24.1"</li>
+                </ul>
+                <div class="night-pack"><span>Пакет Ночь</span> от 1000 ₽</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="console-zones">
+        <h2 class="section-title fade-in-up">PlayStation 5 Lounge</h2>
+        <div class="grid">
+            <div class="card fade-in-up" style="transition-delay: 0.1s;">
+                <h3>PS5 - 65" <span class="price">от 250 ₽</span></h3>
+                <p class="qty">Лаунж зоны</p>
+                <div class="night-pack" style="margin-top: 20px;"><span>Пакет Ночь</span> от 1000 ₽</div>
+            </div>
+            <div class="card fade-in-up" style="transition-delay: 0.2s;">
+                <h3>VIP 75" <span class="price">от 300 ₽</span></h3>
+                <p class="qty">VIP Лаунж зоны</p>
+                <div class="night-pack" style="margin-top: 20px;"><span>Пакет Ночь</span> от 1100 ₽</div>
+            </div>
+            <div class="card fade-in-up" style="transition-delay: 0.3s;">
+                <h3>VIP 86" <span class="price">от 350 ₽</span></h3>
+                <p class="qty">VIP Лаунж зоны</p>
+                <div class="night-pack" style="margin-top: 20px;"><span>Пакет Ночь</span> от 1300 ₽</div>
+            </div>
+            <div class="card fade-in-up" style="border-color: rgba(255, 204, 0, 0.3); transition-delay: 0.4s;">
+                <h3>VIP+ 100" <span class="price">от 450 ₽</span></h3>
+                <p class="qty">ТВ 100 Дюймов 140Hz</p>
+                <div class="night-pack" style="margin-top: 20px;"><span>Пакет Ночь</span> от 1800 ₽</div>
+            </div>
+        </div>
+        <p class="fade-in-up" style="text-align: center; margin-top: 30px; color: var(--text-muted); font-size: 0.9rem; transition-delay: 0.5s;">
+            * Цены указаны за 1 геймпад. Подробности уточняйте у администраторов выбранного клуба.
+        </p>
+    </section>
+
+    <section id="chill">
+        <h2 class="section-title fade-in-up">Chill & Bar</h2>
+        <div class="info-grid">
+            <div class="info-card fade-in-up" style="transition-delay: 0.1s;">
+                <h4><i class="ri-goblet-line"></i> Авторские Чаи (1л)</h4>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--card-border);">
+                    <span style="color: #fff; font-family: 'Oswald', sans-serif; font-size: 1.2rem;">Богатый выбор вкусов</span>
+                    <span class="price">от 200 ₽</span>
+                </div>
+                <p class="tea-list">
+                    Манговый сорбет • Изысканный бергамот • Сосновый лес • С чабрецом • Душевный • Шу Пуэр • Наглый фрукт • Вишневый пунш • Виноградный бум • Малина-мята • Клубничный мохито • Марокканская мята
+                </p>
+            </div>
+            <div class="info-card fade-in-up" style="transition-delay: 0.3s;">
+                <h4><i class="ri-blaze-line"></i> Premium Кальян</h4>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <span style="color: #fff; font-family: 'Oswald', sans-serif; font-size: 1.2rem;">Классика / Авторский</span>
+                    <span class="price">от 1000 ₽</span>
+                </div>
+                <p class="tea-list" style="margin-bottom: 30px;">Идеальное дополнение для отдыха в PS5-лаунже. (Доступно не во всех клубах, уточняйте).</p>
+                
+                <h4 style="margin-top: 30px;"><i class="ri-vip-diamond-line"></i> Удобства сети</h4>
+                <ul class="specs" style="margin-bottom: 0;">
+                    <li><i class="ri-bank-card-line"></i> Безналичная оплата, СБП, Наличные</li>
+                    <li><i class="ri-parking-box-line"></i> Бесплатные парковки</li>
+                    <li><i class="ri-star-fill"></i> Высокие оценки на Яндекс и Google</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo fade-in-up">VOLTAGE</div>
+        <p class="footer-desc fade-in-up">Крупнейшая сеть компьютерных клубов Саратова • Работаем 24/7</p>
+
+        <div class="socials fade-in-up">
+            <a href="https://vk.com/voltage_saratov" target="_blank" title="Мы ВКонтакте">
+                <img src="vk-logo.png" alt="VK" class="vk-icon-img">
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Эффект шапки при скролле
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Анимации появления элементов
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in-up').forEach(el => {
+                observer.observe(el);
+            });
+
+            // ОБНОВЛЕНИЕ: Скрипт для работы модального окна галереи
+            const modal = document.getElementById("imageModal");
+            const modalImg = document.getElementById("fullImage");
+            const closeBtn = document.querySelector(".close-modal");
+            const galleryImages = document.querySelectorAll(".gallery-item img");
+
+            galleryImages.forEach(img => {
+                img.addEventListener("click", function() {
+                    modal.style.display = "flex";
+                    setTimeout(() => modal.classList.add("show"), 10);
+                    modalImg.src = this.src;
+                });
+            });
+
+            const closeModal = () => {
+                modal.classList.remove("show");
+                setTimeout(() => modal.style.display = "none", 400);
+            };
+
+            if(closeBtn) closeBtn.addEventListener("click", closeModal);
+            
+            if(modal) {
+                modal.addEventListener("click", (e) => {
+                    if (e.target === modal) closeModal();
+                });
+            }
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === "Escape" && modal && modal.classList.contains("show")) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
